@@ -1,0 +1,17 @@
+[project]
+name = "portfolio"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "aiohttp>=3.13.3",
+    "beautifulsoup4>=4.14.3",
+    "faiss-cpu>=1.13.2",
+    "fpdf>=1.7.2",
+    "gradio>=6.9.0",
+    "huggingface-hub>=1.7.1",
+    "python-dotenv>=1.2.2",
+    "requests>=2.32.5",
+    "sentence-transformers>=5.3.0",
+]
