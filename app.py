@@ -87,7 +87,9 @@ class DigitalTwin:
                     questions in a knowledeable and professional manner clearly and concisely."},
             {
                 "role": "user",
-                "content": f"Context:\n{context}\n\nQuestion:\n{user_input}"
+                "content": f"Answer the following question concisely without elaborating unnecessarily. \
+                    If you can't answer the question, advise the user to reach out on my contact page. \
+                        Context:\n{context}\n\nQuestion:\n{user_input}"
             }
         ]
 
@@ -126,7 +128,7 @@ LANDING_HTML = """
     <div class="landing-aurora" aria-hidden="true"></div>
     <div class="landing-grid" aria-hidden="true"></div>
     <div class="landing-inner">
-        <p class="landing-eyebrow">Portfolio · Digital twin</p>
+        <p class="landing-eyebrow">Nice to meet you · I am</p>
         <h1 class="landing-title">Freeman Goja</h1>
         <p class="landing-tagline">AI Engineer · Data Scientist . Mentor .Founder</p>
         <p class="landing-lede">Glad you’re here. Take a look around, see what I’ve built, and feel free to reach out anytime.</p>
@@ -390,7 +392,7 @@ button.landing-cta {
     transform: translateY(-1px);
 }
 
-/* Chat section */
+/* Chat section — Gradio bubbles use CSS vars: .user → --color-accent-soft; .bot → --background-fill-secondary */
 #chat-section {
     background: rgba(15, 23, 42, 0.55);
     border: 1px solid rgba(51, 65, 85, 0.55);
@@ -398,25 +400,45 @@ button.landing-cta {
     padding: 1.25rem;
     margin-bottom: 0.5rem;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+    /* Cascade into Chatbot subtree (flex-wrap uses --body-text-color) */
+    --body-text-color: #f8fafc;
+    --body-text-color-subdued: #94a3b8;
+    --color-accent-soft: #0b1220;
+    --background-fill-secondary: #0b1220;
+    --border-color-primary: rgba(148, 163, 184, 0.45);
+    --border-color-accent: rgba(34, 211, 238, 0.55);
+    --border-color-accent-subdued: rgba(34, 211, 238, 0.35);
+    --color-text-link: #7dd3fc;
 }
 #chat-section .block {
     margin-bottom: 0.5rem;
 }
-#chat-section [data-testid="chatbot"] [class*="message"],
-#chat-section [data-testid="chatbot"] [class*="bubble"],
-#chat-section [data-testid="chatbot"] [class*="bot"],
-#chat-section [data-testid="chatbot"] [class*="user"] {
-    background: #0b1220 !important;
+#portfolio-chatbot .user,
+#portfolio-chatbot .bot {
     background-color: #0b1220 !important;
-    color: #ffffff !important;
+    color: #f8fafc !important;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.35) !important;
+}
+#portfolio-chatbot .prose.chatbot.md {
     opacity: 1 !important;
 }
-#chat-section [data-testid="chatbot"] [class*="message"] *,
-#chat-section [data-testid="chatbot"] [class*="bubble"] *,
-#chat-section [data-testid="chatbot"] [class*="bot"] *,
-#chat-section [data-testid="chatbot"] [class*="user"] * {
-    color: #ffffff !important;
-    opacity: 1 !important;
+#portfolio-chatbot .prose,
+#portfolio-chatbot .prose p,
+#portfolio-chatbot .prose li,
+#portfolio-chatbot .prose td,
+#portfolio-chatbot .prose th {
+    color: #f8fafc !important;
+}
+#portfolio-chatbot .prose a {
+    color: #7dd3fc !important;
+}
+#portfolio-chatbot .prose code {
+    color: #e2e8f0 !important;
+    background: rgba(30, 41, 59, 0.9) !important;
+}
+#portfolio-chatbot .prose pre {
+    background: rgba(30, 41, 59, 0.95) !important;
+    color: #e2e8f0 !important;
 }
 
 /* Inputs */
@@ -551,10 +573,10 @@ with gr.Blocks(css=CSS, theme=APP_THEME, title="AI Freeman") as demo:
 
         with gr.Column(visible=True, elem_classes=["section-panel"]) as col_chat:
             gr.Markdown(
-                "<p class='section-hint'>Chat with Freeman's digital twin about anything...</p>"
+                "<p class='section-hint'>Hi, I am Freeman. How are you doing today?</p>"
             )
             with gr.Group(elem_id="chat-section"):
-                chatbot = gr.Chatbot(height=480)
+                chatbot = gr.Chatbot(height=480, elem_id="portfolio-chatbot")
                 msg = gr.Textbox(
                     placeholder="Ask me anything about AI or mentorship...",
                     show_label=False,
